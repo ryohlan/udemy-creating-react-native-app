@@ -1,0 +1,3 @@
+rootProject.name = 'twitter_client'
+
+include ':app'
