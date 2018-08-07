@@ -13,7 +13,7 @@ import TwitterKit
 class TwitterModule: NSObject {
   @objc(auth:reject:)
   func auth(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    Twitter.sharedInstance().logIn(completion: { (session, error) in
+    TWTRTwitter.sharedInstance().logIn(completion: { (session, error) in
       if let session = session {
         resolve([
           "id": session.userID,
@@ -41,14 +41,14 @@ class TwitterModule: NSObject {
 
   @objc(isLogined:reject:)
   func isLogined(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-    resolve(Twitter.sharedInstance().sessionStore.existingUserSessions().count > 0)
+    resolve(TWTRTwitter.sharedInstance().sessionStore.existingUserSessions().count > 0)
   }
   
   @objc(getTimeline:reject:)
   func getTimeline(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let client = TWTRAPIClient.withCurrentUser()
     let endpoint = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-    let request = client.urlRequest(withMethod: "GET", url: endpoint, parameters: nil, error: nil)
+    let request = client.urlRequest(withMethod: "GET", urlString: endpoint, parameters: nil, error: nil)
     client.sendTwitterRequest(request, completion: {(response,data, e) in
       if let e = e {
         print(e);
